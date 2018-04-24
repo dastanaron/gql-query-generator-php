@@ -1,26 +1,39 @@
 <?php
 
-namespace backend\components;
+namespace dastanaron\GraphQL;
 
 class GraphQL
 {
 
-    public $filter = array();
-    public $select = array();
-    public $query = '';
-    public $queryString;
+    protected $filter = array();
+    protected $select = array();
+    protected $base = '';
+    protected $query = '';
 
-    public $objectFilter;
 
-    public function __construct()
+
+    public function __construct($base, $filter, $select)
     {
-        $this->objectFilter = new \stdClass();
+        $this->base = $base;
+        $this->filter = $filter;
+        $this->select = $select;
+        $this->buildQuery();
+    }
+    
+    public function __toString()
+    {
+        return $this->query;
     }
 
     public function buildQuery()
     {
-        $this->queryString =  '{'.$this->query . $this->filter() . $this->select() . '}';
+        $this->query =  '{'.$this->base . $this->filter() . $this->select() . '}';
         return $this;
+    }
+
+    public function getQuery()
+    {
+        return $this->query;
     }
 
     public function filter()
@@ -33,8 +46,6 @@ class GraphQL
         $totalCount = count($this->filter);
 
         foreach($this->filter as $key => $element) {
-
-            $this->objectFilter->$key = $element;
 
             if(is_array($element)) {
                 $string .= $key. ': [';
