@@ -9,6 +9,17 @@ GraphQL
 
 На данном этапе нет стабильной версии, учитывайте это, при установке с композера.
 
+
+Установка
+======================
+`composer require dastanaron/graphql-querybuilder "@dev"`
+
+Используйте в своем php файле, если вы используете autoload.php из composer
+
+```php
+use dastanaron\GraphQL\GraphQL;
+```
+
 Примеры работы
 -----------------------
 
@@ -72,33 +83,43 @@ $select = [
 ----------------------
 
 ```php
-$query = 'Users';
+<?php
+require 'vendor/autoload.php';
+
+use dastanaron\GraphQL\QueryBuilder;
 
 $filter = [
-	'lang' => 'ru',
-	'foo' => 'bar',
-	'limit' => 10
+    'lang' => 'ru',
+    'foo' => 'bar',
+    'limit' => 10
 ];
 
 $select = [
-	'name',
-	'age',
-	'documents' =>
-		[
-			'passport',
-			'snils',
-			'other',
-			'photo(preset: "55x55")'
-		]
+    'name',
+    'age',
+    'documents' =>
+        [
+            'passport' => [
+                'number',
+                'seria'
+            ],
+            'snils',
+            'other',
+            'photo(preset: "55x55")'
+        ]
 ];
 
-$graphQL = new GraphQL($query, $filter, $select);
 
 
-echo($graphQL); //Выведет сформированный запрос
+$graphQl = new QueryBuilder('User', $filter, $select);
+
+echo $graphQl.PHP_EOL;
+
+
+echo($graphQl); //Выведет сформированный запрос
 
 //Если нужно вернуть запрос, есть метод:
-$query = $graphQL->getQuery();
+$query = $graphQl->getQuery();
 
 ```
 

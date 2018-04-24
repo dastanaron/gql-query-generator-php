@@ -1,5 +1,5 @@
 {
-  "name": "dastanaron/GraphQLQueryBuilder",
+  "name": "dastanaron/graphql-querybuilder",
   "description": "GraphQL Query Builder",
   "keywords": ["ru", "GraphQL", "extends"],
   "type": "extension",

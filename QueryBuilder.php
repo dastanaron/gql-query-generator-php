@@ -2,7 +2,7 @@
 
 namespace dastanaron\GraphQL;
 
-class GraphQL
+class QueryBuilder
 {
 
     protected $filter = array();
@@ -91,33 +91,7 @@ class GraphQL
         $totalIteration = 1;
         $totalCount = count($this->select);
 
-        foreach($this->select as $key => $elem) {
-
-            if(is_array($elem)) {
-                $string .= $key.'{';
-
-                $iteration = 1;
-                $itemCount = count($elem);
-                foreach ($elem as $item) {
-                    $string .= $item;
-
-                    if($iteration !== $itemCount) {
-                        $string .= ' ';
-                    }
-                    $iteration++;
-                }
-                $string .= '}';
-            }
-            else {
-                $string .= $elem;
-            }
-
-            if($totalCount !== $totalIteration) {
-                $string .= ' ';
-            }
-
-            $totalIteration++;
-        }
+        $string .= $this->recurseImplode(' ', $this->select);
 
         $string .= '}';
 
@@ -135,6 +109,23 @@ class GraphQL
         else {
             return '"'.$var.'"';
         }
+    }
+
+    function recurseImplode($glue, $array) {
+        $ret = '';
+
+        foreach ($array as $key => $item) {
+            if (is_array($item)) {
+                
+                $ret .= $key . ' {'.$this->recurseImplode($glue, $item) . $glue.'} ';
+            } else {
+                $ret .= $item . $glue;
+            }
+        }
+
+        $ret = substr($ret, 0, 0-strlen($glue));
+
+        return $ret;
     }
 
 }
