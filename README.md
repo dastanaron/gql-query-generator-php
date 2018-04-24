@@ -126,7 +126,7 @@ $query = $graphQl->getQuery();
 `echo` выведет: 
 
 ```graphql
-{Users(lang: "ru", foo: "bar", limit: 10){name age documents{passport snils other photo(preset: "55x55")}}}
+{User(lang: "ru", foo: "bar", limit: 10){name age documents {passport {number seria } snils other photo(preset: "55x55") }}}
 ```
 
 
