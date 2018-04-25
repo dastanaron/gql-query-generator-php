@@ -17,7 +17,7 @@ GraphQL
 Используйте в своем php файле, если вы используете autoload.php из composer
 
 ```php
-use dastanaron\GraphQL\GraphQL;
+use dastanaron\GraphQL\QueryBuilder;
 ```
 
 Примеры работы
