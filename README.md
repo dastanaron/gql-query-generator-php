@@ -1,23 +1,21 @@
-GraphQL
+GraphQL (GQL) query generator
 =======================
 
-Библиотека для работы с GaphQL запросами. Позволяет удобно составлять 
+Библиотека для работы с GraphQL запросами. Позволяет удобно составлять 
 структуру запросов, рефракторить ее, или собирать постепенно в
 зависимости от условий. Данная библиотека будет улучшаться,
 данная версия работает с массивами. В дальнейшем, планируется доработать,
 ее для работы с объектами.
 
-На данном этапе нет стабильной версии, учитывайте это, при установке с композера.
-
 
 Установка
 ======================
-`composer require dastanaron/graphql-querybuilder "@dev"`
+`composer require dastanaron/gql-query-generator-php "@dev"`
 
 Используйте в своем php файле, если вы используете autoload.php из composer
 
 ```php
-use dastanaron\GraphQL\QueryBuilder;
+use dastanaron\GraphQL\GQLQueryGenerator;
 ```
 
 Примеры работы
@@ -66,7 +64,7 @@ $select = [
 	'documents' =>
 		[
 			'passport',
-			'snils',
+			'driver_license',
 			'other',
 			'photo(preset: "55x55")'
 		]
@@ -76,7 +74,7 @@ $select = [
 Данный пример сформирует такую строку запроса:
 
 ```graphql
-{/*Base*/(/*filter*/){name age documents{passport snils other photo(preset: "55x55")}}}
+{/*Base*/(/*filter*/){name age documents{passport driver_license other photo(preset: "55x55")}}}
 ```
 
 Пример:
@@ -84,14 +82,14 @@ $select = [
 
 ```php
 <?php
-require 'vendor/autoload.php';
+require_once (__DIR__. './vendor/autoload.php');
 
-use dastanaron\GraphQL\QueryBuilder;
+use dastanaron\GraphQL\GQLQueryGenerator;
 
 $filter = [
-    'lang' => 'ru',
-    'foo' => 'bar',
-    'limit' => 10
+    'lang'  => 'ru',
+    'foo'   => 'bar',
+    'limit' => 10,
 ];
 
 $select = [
@@ -101,17 +99,19 @@ $select = [
         [
             'passport' => [
                 'number',
-                'seria'
+                'serial',
             ],
-            'snils',
+            'driver_license' => [
+                'number',
+            ],
             'other',
-            'photo(preset: "55x55")'
-        ]
+            'photo(preset: "55x55")',
+        ],
 ];
 
 
 
-$graphQl = new QueryBuilder('User', $filter, $select);
+$graphQl = new GQLQueryGenerator('user', $filter, $select);
 
 echo $graphQl.PHP_EOL;
 
@@ -126,10 +126,24 @@ $query = $graphQl->getQuery();
 `echo` выведет: 
 
 ```graphql
-{User(lang: "ru", foo: "bar", limit: 10){name age documents {passport {number seria } snils other photo(preset: "55x55") }}}
+{user(lang: "ru", foo: "bar", limit: 10){name age documents {passport {number serial } driver_license {number } other photo(preset: "55x55") }}}
 ```
 
+Вы так же можете посмотреть примеры в тестах,
+для запуска тестов нужно сделать следующее
+```bash
+composer install
+php ./vendor/phpunit/phpunit/phpunit
+```
 
-Дальнейшие версии будут иметь описание на английском языке, и возможно по другому работать.
+Примерный ответ тестов:
+```
+ ./vendor/phpunit/phpunit/phpunit
+PHPUnit 8.5.2 by Sebastian Bergmann and contributors.
 
+..                                                                  2 / 2 (100%)
 
+Time: 21 ms, Memory: 4.00 MB
+
+OK (2 tests, 2 assertions)
+```
