@@ -10,7 +10,7 @@ GraphQL (GQL) query generator
 
 Установка
 ======================
-`composer require dastanaron/gql-query-generator-php "@dev"`
+`composer require dastanaron/graphql-querybuilder "@dev"`
 
 Используйте в своем php файле, если вы используете autoload.php из composer
 
