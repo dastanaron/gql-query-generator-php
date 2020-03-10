@@ -38,34 +38,4 @@ class GQLQueryGeneratorTest extends TestCase
             $formedQuery
         );
     }
-
-    public function testRealRequest(): void
-    {
-        $queryGenerator = new GQLQueryGenerator('realty_living_objects', [
-            'page' => 1,
-            'limit' => 15,
-            'residential_complex_id' => ['=', '1'],
-        ], [
-            'current_page',
-            'per_page',
-            'total',
-            'data' => [
-                'id',
-                'district' => [
-                    'id',
-                    'name',
-                ],
-                'object_category' => [
-                    'id',
-                    'name',
-                ],
-                'floor',
-                'area'
-            ],
-        ]);
-        $formedQuery = $queryGenerator->getQuery();
-        $this->assertSame(
-            '{realty_living_objects(page: 1, limit: 15, residential_complex_id: ["=", "1"]){current_page per_page total data {id district {id name } object_category {id name } floor area }}}',
-            $formedQuery);
-    }
 }
